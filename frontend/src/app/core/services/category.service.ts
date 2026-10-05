@@ -1,15 +1,19 @@
-import { Injectable, signal } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Category } from '../models/category.model';
-import { MOCK_CATEGORIES } from '../mocks/mock-categories';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  categories = signal<Category[]>(MOCK_CATEGORIES);
+  private http = inject(HttpClient);
+
+  private readonly apiUrl = 'https://knowexp.onrender.com/api/categories';
+
+  categories = signal<Category[]>([]);
 
   getCategories(): Observable<Category[]> {
-    return of(this.categories());
+    return this.http.get<Category[]>(this.apiUrl);
   }
-}
+} 
