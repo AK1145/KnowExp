@@ -1,0 +1,85 @@
+# ==============================
+# Operating System
+# ==============================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+
+# ==============================
+# IDE
+# ==============================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+
+# ==============================
+# Java / Maven
+# ==============================
+
+# Maven build output
+target/
+
+# Compiled Java
+*.class
+
+# Logs
+*.log
+
+
+# ==============================
+# Angular / Node
+# ==============================
+
+node_modules/
+
+# Angular build output
+dist/
+
+# Angular cache
+.angular/
+
+
+# ==============================
+# Environment / Secrets
+# ==============================
+
+.env
+.env.*
+!.env.example
+
+# Local Spring configuration
+application-local.properties
+application-local.yml
+
+
+# ==============================
+# Database / Local Files
+# ==============================
+
+*.db
+*.sqlite
+*.sqlite3
+
+
+# ==============================
+# Temporary Files
+# ==============================
+
+*.tmp
+*.temp
+*.bak

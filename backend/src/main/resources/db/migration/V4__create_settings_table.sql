@@ -1,0 +1,5 @@
+CREATE TABLE settings (
+    id BIGINT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+    monthly_budget DECIMAL(12,2) NOT NULL DEFAULT 0,
+    currency VARCHAR(3) NOT NULL DEFAULT 'INR'
+);
