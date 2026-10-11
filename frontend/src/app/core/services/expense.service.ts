@@ -47,6 +47,14 @@ export class ExpenseService {
     );
   }
 
+
+  downloadMonthlyReport(month: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/report`, {
+      params: { month },
+      responseType: 'blob'
+    });
+  }
+
   getExpenseById(id: number): Observable<Expense> {
     return this.http.get<Expense>(`${this.apiUrl}/${id}`);
   }

@@ -7,9 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -35,6 +40,23 @@ public class ExpenseController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return expenseService.getAllExpenses(search, categoryId, from, to, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "expenseDate", "createdAt")));
+    }
+
+
+    @GetMapping(value = "/report", produces = "text/csv;charset=UTF-8")
+    public ResponseEntity<String> downloadMonthlyReport(@RequestParam String month) {
+        final YearMonth selectedMonth;
+        try {
+            selectedMonth = YearMonth.parse(month);
+        } catch (DateTimeParseException ex) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Month must use YYYY-MM format", ex);
+        }
+        String filename = "knowexp-expenses-" + selectedMonth + ".csv";
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("text/csv;charset=UTF-8"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .body(expenseService.createMonthlyCsvReport(selectedMonth));
     }
 
     @GetMapping("/{id}")

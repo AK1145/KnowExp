@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,35 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
         this.categoryRepository = categoryRepository;
         this.expenseMapper = expenseMapper;
+    }
+
+
+    @Transactional(readOnly = true)
+    public String createMonthlyCsvReport(YearMonth month) {
+        LocalDate start = month.atDay(1);
+        LocalDate end = month.atEndOfMonth();
+        List<Expense> expenses = expenseRepository.findByExpenseDateBetweenOrderByExpenseDateDesc(start, end);
+        StringBuilder csv = new StringBuilder("Date,Category,Note,Amount (INR)\r\n");
+        BigDecimal total = BigDecimal.ZERO;
+        for (Expense expense : expenses) {
+            csv.append(csvCell(expense.getExpenseDate().toString())).append(',')
+                    .append(csvCell(expense.getCategory().getName())).append(',')
+                    .append(csvCell(expense.getNote() == null ? "" : expense.getNote())).append(',')
+                    .append(expense.getAmount().toPlainString()).append("\r\n");
+            total = total.add(expense.getAmount());
+        }
+        csv.append("\r\nTotal,,,").append(total.toPlainString()).append("\r\n");
+        return "\uFEFF" + csv;
+    }
+
+    private String csvCell(String value) {
+        // Prevent spreadsheet formula execution for user-controlled text fields.
+        String safeValue = value.stripLeading();
+        if (!safeValue.isEmpty() && "=+-@".indexOf(safeValue.charAt(0)) >= 0) {
+            value = "'" + value;
+        }
+        String escaped = value.replace("\"", "\"\"");
+        return "\"" + escaped + "\"";
     }
 
     @Transactional

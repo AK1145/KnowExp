@@ -24,10 +24,19 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
     <div class="p-4 md:p-8 max-w-4xl mx-auto flex flex-col h-full space-y-6">
       
       <!-- Page Header -->
-      <div class="flex items-center justify-between">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h2 class="text-2xl font-bold tracking-tight text-[var(--text-primary)]">Transactions</h2>
           <p class="text-sm text-[var(--text-secondary)] mt-0.5">All your recorded expenses</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <label for="report-month" class="text-xs text-[var(--text-secondary)]">Monthly report</label>
+          <input id="report-month" type="month" [value]="reportMonth" (change)="setReportMonth($event)"
+            class="px-3 py-2 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm outline-none focus:border-[var(--color-primary)]" />
+          <button type="button" (click)="downloadReport()" [disabled]="downloadingReport"
+            class="px-3.5 py-2 rounded-xl bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-light)] disabled:opacity-60 transition-colors">
+            {{ downloadingReport ? 'Preparing…' : '↓ Download CSV' }}
+          </button>
         </div>
       </div>
 
@@ -242,6 +251,9 @@ export class TransactionsComponent implements OnInit {
   categories = signal<Category[]>([]);
   selectedCategoryId = signal<number>(0);
   searchQuery = '';
+  private readonly now = new Date();
+  reportMonth = `${this.now.getFullYear()}-${String(this.now.getMonth() + 1).padStart(2, '0')}`;
+  downloadingReport = false;
 
   editingExpense = signal<Expense | null>(null);
 
@@ -257,6 +269,35 @@ export class TransactionsComponent implements OnInit {
       this.categories.set(cats.filter(c => c.isActive));
     });
     this.loadExpenses();
+  }
+
+
+  setReportMonth(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    if (value) this.reportMonth = value;
+  }
+
+  downloadReport() {
+    if (!this.reportMonth || this.downloadingReport) return;
+    this.downloadingReport = true;
+    this.expenseService.downloadMonthlyReport(this.reportMonth).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `knowexp-expenses-${this.reportMonth}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+        this.downloadingReport = false;
+      },
+      error: (error) => {
+        console.error('Could not download monthly report', error);
+        alert('Could not download the report. Please check your connection and try again.');
+        this.downloadingReport = false;
+      }
+    });
   }
 
   loadExpenses() {

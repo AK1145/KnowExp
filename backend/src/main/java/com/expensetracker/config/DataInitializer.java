@@ -24,7 +24,8 @@ public class DataInitializer {
                         new Category(null, "Beauty", "💄", true),
                         new Category(null, "Bills", "📄", true),
                         new Category(null, "Travel", "✈️", true),
-                        new Category(null, "Snacks", "🍿", true)
+                        new Category(null, "Snacks", "🍿", true),
+                        new Category(null, "Movies and Others", "🎬", true)
                 ));
             }
 
