@@ -106,7 +106,7 @@ export class CategoryBreakdownComponent {
   private categoryColorMap: { [key: string]: string } = {
     'Food': '#FF9500',
     'Grocery': '#34C759',
-    'Beauty': '#AF52DE',
+    'Clothes and essentials': '#AF52DE',
     'Bills': '#FF3B30',
     'Travel': '#007AFF',
     'Snacks': '#FF6482'

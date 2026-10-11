@@ -21,7 +21,7 @@ public class DataInitializer {
                 categoryRepository.saveAll(List.of(
                         new Category(null, "Food", "🍕", true),
                         new Category(null, "Grocery", "🛒", true),
-                        new Category(null, "Beauty", "💄", true),
+                        new Category(null, "Clothes and essentials", "👕", true),
                         new Category(null, "Bills", "📄", true),
                         new Category(null, "Travel", "✈️", true),
                         new Category(null, "Snacks", "🍿", true),
