@@ -59,6 +59,22 @@ public class ExpenseController {
                 .body(expenseService.createMonthlyCsvReport(selectedMonth));
     }
 
+    @GetMapping(value = "/report/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> downloadMonthlyPdfReport(@RequestParam String month) {
+        final YearMonth selectedMonth;
+        try {
+            selectedMonth = YearMonth.parse(month);
+        } catch (DateTimeParseException ex) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Month must use YYYY-MM format", ex);
+        }
+        String filename = "knowexp-monthly-report-" + selectedMonth + ".pdf";
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .body(expenseService.createMonthlyPdfReport(selectedMonth));
+    }
+
     @GetMapping("/{id}")
     public ExpenseResponse getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id);

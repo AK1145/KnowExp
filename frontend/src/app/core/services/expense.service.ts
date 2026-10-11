@@ -49,7 +49,7 @@ export class ExpenseService {
 
 
   downloadMonthlyReport(month: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/report`, {
+    return this.http.get(`${this.apiUrl}/report/pdf`, {
       params: { month },
       responseType: 'blob'
     });

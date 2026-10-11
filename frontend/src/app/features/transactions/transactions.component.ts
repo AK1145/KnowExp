@@ -35,7 +35,7 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
             class="px-3 py-2 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm outline-none focus:border-[var(--color-primary)]" />
           <button type="button" (click)="downloadReport()" [disabled]="downloadingReport"
             class="px-3.5 py-2 rounded-xl bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-light)] disabled:opacity-60 transition-colors">
-            {{ downloadingReport ? 'Preparing…' : '↓ Download CSV' }}
+            {{ downloadingReport ? 'Preparing…' : '↓ Download PDF Report' }}
           </button>
         </div>
       </div>
@@ -285,7 +285,7 @@ export class TransactionsComponent implements OnInit {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `knowexp-expenses-${this.reportMonth}.csv`;
+        link.download = `knowexp-monthly-report-${this.reportMonth}.pdf`;
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -294,7 +294,7 @@ export class TransactionsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Could not download monthly report', error);
-        alert('Could not download the report. Please check your connection and try again.');
+        alert('Could not download the PDF report. Please check your connection and try again.');
         this.downloadingReport = false;
       }
     });
