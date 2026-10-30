@@ -6,5 +6,7 @@ export const MOCK_CATEGORIES: Category[] = [
   { id: 3, name: 'Clothes and essentials', icon: '👕', isActive: true },
   { id: 4, name: 'Bills', icon: '📄', isActive: true },
   { id: 5, name: 'Travel', icon: '✈️', isActive: true },
-  { id: 6, name: 'Snacks', icon: '🍿', isActive: true }
+  { id: 6, name: 'Snacks', icon: '🍿', isActive: true },
+  { id: 7, name: 'Movies and Others', icon: '🎬', isActive: true },
+  { id: 8, name: 'Others', icon: '📦', isActive: true }
 ];

@@ -109,7 +109,9 @@ export class CategoryBreakdownComponent {
     'Clothes and essentials': '#AF52DE',
     'Bills': '#FF3B30',
     'Travel': '#007AFF',
-    'Snacks': '#FF6482'
+    'Snacks': '#FF6482',
+    'Movies and Others': '#5856D6',
+    'Others': '#8E8E93'
   };
 
   getCategoryColor(name: string): string {
